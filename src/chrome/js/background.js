@@ -15,12 +15,11 @@ function getVideoPlayer() {
 
 function isAdShowing() {
   const wrapper = getVideoWrapper();
-  const skipButton = getSkipButton();
 
-  if (wrapper !== null) {
-    return wrapper !== undefined && (String(wrapper.className).includes("ad-showing") || skipButton !== null);
-  } else {
+  if (wrapper == null) {
     return null;
+  } else {
+    return wrapper !== undefined && (String(wrapper.className).includes("ad-showing"));
   }
 }
 
@@ -32,23 +31,10 @@ function getSkipButton() {
 }
 
 function waitForPlayer() {
-  if (getVideoPlayer()) {
-    hookVideoPlayer();
-  } else {
-    setTimeout(() => {
-      waitForPlayer();
-    }, 200);
-  }
-}
-
-function hookVideoPlayer() {
-  const videoPlayer = getVideoPlayer();
-  videoPlayer.addEventListener("timeupdate", () => {
-    getSkipButton()?.click();
-  });
-
   setInterval(function() {
-    if (isAdShowing() && isFinite(videoPlayer.duration)) {
+    getSkipButton()?.click();
+    let videoPlayer = getVideoPlayer()
+    if (!videoPlayer && isAdShowing() && isFinite(videoPlayer.duration)) {
       videoPlayer.pause();
       videoPlayer.currentTime = videoPlayer.duration - 1;
       videoPlayer.play();
