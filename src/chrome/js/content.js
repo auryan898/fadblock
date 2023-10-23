@@ -30,19 +30,39 @@ function getSkipButton() {
   return skipAdButton.length > 0 ? skipAdButton[0] : null;
 }
 
-function waitForPlayer() {
-  setInterval(function() {
-    getSkipButton()?.click();
-    let videoPlayer = getVideoPlayer()
-    if (!videoPlayer && isAdShowing() && isFinite(videoPlayer.duration)) {
-      videoPlayer.pause();
-      videoPlayer.currentTime = videoPlayer.duration - 1;
-      videoPlayer.play();
-      getSkipButton()?.click();
-    }
+function fastForwardAd() {
+  let videoPlayer = getVideoPlayer()
+  if (videoPlayer != null && isAdShowing() && isFinite(videoPlayer.duration)) {
+    console.log("doing the thing");
+    videoPlayer.currentTime = videoPlayer.duration - 0.5;
+    // videoPlayer.pause();
+    // videoPlayer.play();
+  }
+}
+
+function skipAnyAds() {
+  fastForwardAd();
+  getSkipButton()?.click();
+  console.log('check');
+
+  return getVideoContainer() != null;
+}
+
+function performSkip() {
+  setTimeout(function() {
+    skipAnyAds()
+    performSkip();
   }, 1000);
 }
 
+function waitForPlayer() {
+  if (getVideoContainer() != null) {
+    performSkip();
+  } else {
+    setTimeout(waitForPlayer, 500);
+  }
+}
+waitForPlayer();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message)
     return true
