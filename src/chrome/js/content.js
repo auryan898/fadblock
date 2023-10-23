@@ -33,7 +33,6 @@ function getSkipButton() {
 function fastForwardAd() {
   let videoPlayer = getVideoPlayer()
   if (videoPlayer != null && isAdShowing() && isFinite(videoPlayer.duration)) {
-    console.log("doing the thing");
     videoPlayer.currentTime = videoPlayer.duration - 0.5;
     // videoPlayer.pause();
     // videoPlayer.play();
@@ -43,9 +42,6 @@ function fastForwardAd() {
 function skipAnyAds() {
   fastForwardAd();
   getSkipButton()?.click();
-  console.log('check');
-
-  return getVideoContainer() != null;
 }
 
 function performSkip() {
