@@ -25,8 +25,8 @@ function isAdShowing() {
 
 function getSkipButton() {
   const skipAdButton = Array.from(
-    document.getElementsByClassName("ytp-ad-skip-button ytp-button"),
-  );
+    document.getElementsByClassName("ytp-ad-skip-button ytp-button")
+  ).concat(Array.from(document.getElementsByClassName("ytp-ad-skip-button-modern ytp-button")));
   return skipAdButton.length > 0 ? skipAdButton[0] : null;
 }
 
@@ -53,9 +53,9 @@ function performSkip() {
 
 function waitForPlayer() {
   if (getVideoContainer() != null) {
-    performSkip();
+    setTimeout(performSkip, 2000);
   } else {
-    setTimeout(waitForPlayer, 500);
+    setTimeout(waitForPlayer, 1000);
   }
 }
 waitForPlayer();
